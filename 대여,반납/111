@@ -1,0 +1,25 @@
+import cx_Oracle
+
+conn = cx_Oracle.connect('libadmin/1234@10.10.21.33:1521/xe')
+cursor = conn.cursor()
+
+
+def rent_book(user_id, book_id):
+    sql = f"UPDATE LENDBOOK SET USERID='{user_id}' WHERE BOOKID='{book_id}'"
+    with conn.cursor() as cursor:
+        cursor.execute(sql)
+    conn.commit()
+    print(f"책 {book_id}가 대여되었습니다.")
+
+def return_book(book_id):
+    sql = f"UPDATE LENDBOOK SET USERID=NULL WHERE BOOKID='{book_id}'"
+    with conn.cursor() as cursor:
+        cursor.execute(sql)
+    conn.commit()
+    print(f"책 {book_id}가 반납되었습니다.")
+
+rent_book('user1', 'book1')
+
+# return_book('book1')
+
+conn.close()
